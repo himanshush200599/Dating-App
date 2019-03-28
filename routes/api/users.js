@@ -13,7 +13,7 @@ const User = require("../../models/User");
 router.post("/register", (req, res) => {
   // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
-  // Check validation
+  //Check validation
   if (!isValid) {
     return res.status(400).json(errors);
   }
@@ -21,6 +21,7 @@ router.post("/register", (req, res) => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
     }
+
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
