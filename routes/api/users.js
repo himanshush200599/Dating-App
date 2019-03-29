@@ -9,10 +9,39 @@ const validateLoginInput = require("../../validation/login");
 // Load User model
 const User = require("../../models/User");
 
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "./uploads");
+  },
+  filename: function(req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
+
 //register routes like /api/users/register
-router.post("/register", (req, res) => {
+router.post("/register", upload.single("myImage"), (req, res) => {
   // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
+  console.log(req.file, req.body);
   //Check validation
   if (!isValid) {
     return res.status(400).json(errors);
@@ -25,7 +54,8 @@ router.post("/register", (req, res) => {
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      image: req.file.path
     });
     // Hash password before saving in database
     bcrypt.genSalt(10, (err, salt) => {
