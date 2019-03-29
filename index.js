@@ -16,12 +16,14 @@ app.use(bodyParser.json());
 
 //routes
 const users = require("./routes/api/users");
+const feed = require("./routes/api/feed");
 // Passport middleware
 app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
+app.use("/api/", feed);
 
 //mongo connected
 mongoose.connect(
