@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "client": "npm run start --prefix client",
-    "dev": "concurrently \" npm run client \" \" npm run server \" "
+    "client": "npm run start --prefix client2",
+    "dev": "concurrently \" npm run client2 \" \" npm run server \" "
   },
   "author": "Himanshu Sharma",
   "license": "ISC",
